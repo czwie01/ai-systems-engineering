@@ -39,8 +39,12 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         milestone="M2",
         area="evaluation",
         status=ExperimentStatus.PLANNED,
-        engineering_question="How can an evaluation oracle avoid judging its own output?",
-        intended_invariant="Evaluation evidence is independent of the subject under evaluation.",
+        engineering_question=(
+            "How can an evaluation oracle avoid judging its own output?"
+        ),
+        intended_invariant=(
+            "Evaluation evidence is independent of the subject under evaluation."
+        ),
     ),
     Experiment(
         identifier="failure-semantics",
@@ -48,8 +52,12 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         milestone="M3",
         area="execution",
         status=ExperimentStatus.PLANNED,
-        engineering_question="How can provider failures map to stable application semantics?",
-        intended_invariant="Equivalent failures have provider-independent classifications.",
+        engineering_question=(
+            "How can provider failures map to stable application semantics?"
+        ),
+        intended_invariant=(
+            "Equivalent failures have provider-independent classifications."
+        ),
     ),
     Experiment(
         identifier="ambiguous-completion",
@@ -66,8 +74,12 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         milestone="M5",
         area="observability",
         status=ExperimentStatus.PLANNED,
-        engineering_question="How can an operation retain an auditable execution history?",
-        intended_invariant="Each operation records the decisions and effects needed for audit.",
+        engineering_question=(
+            "How can an operation retain an auditable execution history?"
+        ),
+        intended_invariant=(
+            "Each operation records the decisions and effects needed for audit."
+        ),
     ),
     Experiment(
         identifier="concurrent-promotion",
@@ -84,7 +96,9 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         milestone="M7",
         area="reliability",
         status=ExperimentStatus.PLANNED,
-        engineering_question="How can committed intent reliably produce an external effect?",
+        engineering_question=(
+            "How can committed intent reliably produce an external effect?"
+        ),
         intended_invariant="Committed dispatch intent is not silently lost.",
     ),
 )
