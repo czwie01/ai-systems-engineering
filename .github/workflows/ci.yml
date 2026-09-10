@@ -53,3 +53,4 @@ jobs:
         run: |
           uv run ai-systems list
           uv run ai-systems explain evidence-contracts
+          uv run ai-systems run evidence-contracts
