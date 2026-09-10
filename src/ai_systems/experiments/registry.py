@@ -40,10 +40,12 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         area="evaluation",
         status=ExperimentStatus.PLANNED,
         engineering_question=(
-            "How can an evaluation oracle avoid judging its own output?"
+            "How can an evaluator reject unsupported claims instead of passing on "
+            "citation validity alone?"
         ),
         intended_invariant=(
-            "Evaluation evidence is independent of the subject under evaluation."
+            "A passing verdict requires the evaluated claims to satisfy the evidence "
+            "checks that the verdict explicitly claims to establish."
         ),
     ),
     Experiment(
@@ -66,7 +68,10 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         area="reliability",
         status=ExperimentStatus.PLANNED,
         engineering_question="How can a caller recover when completion is uncertain?",
-        intended_invariant="Retries do not duplicate a logically completed operation.",
+        intended_invariant=(
+            "Retries of one logical operation produce at most one application-visible "
+            "effect under the experiment's stated assumptions."
+        ),
     ),
     Experiment(
         identifier="operation-provenance",
