@@ -26,6 +26,7 @@ uv run ruff check .
 uv run mypy
 uv run pytest
 uv run ai-systems list
+uv run ai-systems run evidence-contracts
 ```
 
 Tests and examples must be deterministic and must not require credentials,

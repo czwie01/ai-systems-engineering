@@ -16,10 +16,26 @@ only the stated invariant under the experiment's stated assumptions. Results
 must not be generalized to providers, workloads, or failure modes that were not
 tested.
 
-## M0 position
+## Current guarantees
 
 M0 establishes repository structure, discovery metadata, and offline checks.
-All M1–M7 invariants are planned targets, not demonstrated guarantees. Their
+M1 adds one demonstrated evidence relationship guarantee:
+
+> Given a catalog with unique immutable evidence identities and correct
+> recorded document/version attribution, an evidence selection accepted by the
+> M1 guard contains only known fragments whose recorded provenance equals the
+> selection's declared provenance.
+
+The executable evidence includes a coherent control, unknown-identity
+rejection, incompatible document/version rejection, and a failure-first control
+showing that identifier existence alone accepts the invalid relationship.
+
+The guarantee assumes that catalog identity and recorded attribution are
+authoritative inputs. It does not establish source truth, claim support,
+retrieval completeness, evidence authenticity, upstream attribution
+correctness, or a universal provenance model.
+
+M2–M7 invariants remain planned targets, not demonstrated guarantees. Their
 registry descriptions communicate intent and do not claim implementation.
 
 ## Illustrative planned example

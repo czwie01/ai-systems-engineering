@@ -10,13 +10,13 @@ its behavior and its boundary is provider- and framework-independent.
 ## Layers
 
 1. **Public interface** — `ai-systems` makes registered experiments
-   discoverable. M0 supports `list` and `explain`; a future `run` command can
-   dispatch implemented experiments through the same registry boundary.
+   discoverable and dispatches available experiments with `run`.
 2. **Experiment registry** — immutable metadata describes every known
-   experiment without implying implementation or success.
-3. **Executable experiments** — future milestone code will own scenarios,
-   probes, expected observations, and evidence. Planned experiments have no
-   placeholder implementation directories.
+   experiment and associates an available experiment with its runner without
+   implying that execution establishes a broader guarantee.
+3. **Executable experiments** — milestone code owns scenarios, probes, expected
+   observations, and evidence. Planned experiments have no placeholder
+   implementation directories.
 4. **Reusable core** — future capabilities may be promoted only when an
    experiment establishes a useful guarantee under explicit assumptions.
 
