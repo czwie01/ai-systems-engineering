@@ -45,3 +45,6 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.uv.build-backend]
+module-name = "ai_systems"
