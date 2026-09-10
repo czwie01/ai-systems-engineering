@@ -21,9 +21,7 @@ def test_experiment_identifiers_are_unique() -> None:
 
 
 def test_only_evidence_contracts_is_available() -> None:
-    statuses = {
-        experiment.identifier: experiment.status for experiment in EXPERIMENTS
-    }
+    statuses = {experiment.identifier: experiment.status for experiment in EXPERIMENTS}
 
     assert statuses["evidence-contracts"] is ExperimentStatus.AVAILABLE
     assert all(
