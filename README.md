@@ -37,17 +37,19 @@ with a non-zero exit status. `run` executes only experiments marked
 
 ## What's in v0.1.0
 
-1. `evidence-contracts` shows that known evidence identities are not enough.
-   A deterministic contract still rejects fragments whose recorded provenance
-   conflicts with the selection's declared provenance.
-2. `evaluation-oracle-integrity` shows that valid citations are not enough.
-   Under an explicit atomic support model, every represented claim requirement
-   must be supported before a passing verdict.
+This is the first public reference boundary. Demonstrated guarantees are
+intentionally narrow and executable.
 
-Read them in that order. M1-valid evidence is a necessary input to M2, not a
-passing evaluation result. M3–M7, a shared library API, and PyPI publication
-are outside this version. See [CHANGELOG.md](CHANGELOG.md) for the compact
-release record.
+- M1 `evidence-contracts` — valid evidence identity is not sufficient for
+  provenance compatibility.
+- M2 `evaluation-oracle-integrity` — valid citations are not sufficient for
+  claim support. Under the explicit atomic support model, every represented
+  requirement must be supported before a passing verdict.
+
+Read them in that order. A valid evidence relationship is not a supported
+generated claim. M3–M7 remain planned. This Alpha boundary is not a stable
+public library API and is not published to PyPI. See
+[CHANGELOG.md](CHANGELOG.md) for the release record.
 
 ## Architecture
 
