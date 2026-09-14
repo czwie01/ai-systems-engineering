@@ -35,7 +35,28 @@ authoritative inputs. It does not establish source truth, claim support,
 retrieval completeness, evidence authenticity, upstream attribution
 correctness, or a universal provenance model.
 
-M2–M7 invariants remain planned targets, not demonstrated guarantees. Their
+M2 adds one demonstrated evaluation-oracle guarantee:
+
+> Given M1-valid evidence relationships, complete and correct atomic claim
+> requirements, and correct explicit evidence support annotations, an M2
+> passing verdict checks every represented requirement and finds each one in
+> the checked evidence support.
+
+The executable evidence includes a fully supported control, a false positive
+from the relationship-only evaluator, and deterministic
+`unsupported-requirement` rejection of the same partially unsupported claim.
+The verdict records every checked requirement and stable rejection details.
+
+This guarantee covers explicit support-requirement coverage. It does not
+establish arbitrary natural-language entailment, source truth, evidence or
+retrieval completeness, authenticity, upstream provenance correctness,
+annotation correctness, general evaluator reliability, model alignment, or
+universal hallucination detection.
+
+M1 relationship validity is necessary input to M2, but it is not sufficient for
+a passing M2 claim-support verdict.
+
+M3–M7 invariants remain planned targets, not demonstrated guarantees. Their
 registry descriptions communicate intent and do not claim implementation.
 
 ## Illustrative planned example
