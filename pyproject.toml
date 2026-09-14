@@ -4,14 +4,14 @@ build-backend = "uv_build"
 
 [project]
 name = "ai-systems-engineering"
-version = "0.0.0"
+version = "0.1.0"
 description = "Executable experiments and reusable primitives for reliable AI-enabled software."
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 license-files = ["LICENSE"]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
