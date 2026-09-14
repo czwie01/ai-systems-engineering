@@ -8,10 +8,10 @@ distributed effects, and incomplete evidence. That combination makes ordinary
 questions—what happened, whether a result is correct, and whether an operation
 is safe to retry—surprisingly difficult to answer.
 
-**Current status: Evidence Integrity / M1.** The `evidence-contracts`
-experiment now demonstrates deterministic rejection of evidence selections
-whose recorded provenance conflicts with their declared provenance. M2–M7
-remain planned and establish no current guarantees.
+**Current status: Evaluation Oracle Integrity / M2.** The repository now
+distinguishes valid evidence relationships from valid claim-support verdicts.
+M1 and M2 are executable; M3–M7 remain planned. The v0.1 release checkpoint has
+not been released.
 
 ## Run it now
 
@@ -25,6 +25,8 @@ uv sync
 uv run ai-systems list
 uv run ai-systems explain evidence-contracts
 uv run ai-systems run evidence-contracts
+uv run ai-systems explain evaluation-oracle-integrity
+uv run ai-systems run evaluation-oracle-integrity
 ```
 
 `list` reports all registered experiments and their honest lifecycle status.
@@ -51,7 +53,7 @@ See [Architecture](docs/architecture.md) and the
 | Milestone | Experiment | Area | Status |
 | --- | --- | --- | --- |
 | M1 | `evidence-contracts` | evidence | available |
-| M2 | `evaluation-oracle-integrity` | evaluation | planned |
+| M2 | `evaluation-oracle-integrity` | evaluation | available |
 | v0.1 | Evidence & Evaluation | release checkpoint | planned |
 | M3 | `failure-semantics` | execution | planned |
 | M4 | `ambiguous-completion` | reliability | planned |
@@ -68,8 +70,9 @@ A roadmap entry is not evidence that its invariant holds.
 Every completed experiment must state its demonstrated guarantee, assumptions,
 evidence, and non-guarantees. Planned invariants express what an experiment
 will investigate; they are not current guarantees. M1 demonstrates a narrow
-identity/provenance compatibility guarantee; it does not evaluate whether
-evidence supports a generated claim.
+identity/provenance compatibility guarantee. M2 demonstrates that, under an
+explicit atomic support model, a passing verdict checks every represented claim
+requirement against recorded evidence support.
 
 Read the full [guarantee model](docs/guarantees.md).
 
@@ -91,6 +94,7 @@ uv run mypy
 uv run pytest
 uv run ai-systems list
 uv run ai-systems run evidence-contracts
+uv run ai-systems run evaluation-oracle-integrity
 ```
 
 To apply formatting locally, run `uv run ruff format .`. Development and CI are

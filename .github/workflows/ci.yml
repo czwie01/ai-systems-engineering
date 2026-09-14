@@ -54,3 +54,5 @@ jobs:
           uv run ai-systems list
           uv run ai-systems explain evidence-contracts
           uv run ai-systems run evidence-contracts
+          uv run ai-systems explain evaluation-oracle-integrity
+          uv run ai-systems run evaluation-oracle-integrity
