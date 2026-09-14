@@ -2,8 +2,8 @@
 
 ## Supported versions
 
-The project is in Foundation / M0 and has no released version. Security fixes
-are applied to the default branch; no older version line currently receives
+The project is pre-release and has no released version. Security fixes are
+applied to the default branch; no older version line currently receives
 separate support.
 
 ## Reporting a vulnerability

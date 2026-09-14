@@ -18,6 +18,11 @@ def _parser() -> argparse.ArgumentParser:
         "explain", help="show metadata for a registered experiment"
     )
     explain_parser.add_argument("experiment", help="registered experiment identifier")
+
+    run_parser = subparsers.add_parser(
+        "run", help="run an available registered experiment"
+    )
+    run_parser.add_argument("experiment", help="registered experiment identifier")
     return parser
 
 
@@ -48,6 +53,19 @@ def _explain(identifier: str, parser: argparse.ArgumentParser) -> int:
     return 0
 
 
+def _run(identifier: str, parser: argparse.ArgumentParser) -> int:
+    experiment = get_experiment(identifier)
+    if experiment is None:
+        parser.error(f"unknown experiment: {identifier}")
+    if experiment.runner is None:
+        parser.error(
+            f"experiment is not available to run: {identifier} "
+            f"(status: {experiment.status})"
+        )
+
+    return experiment.runner()
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the command-line interface."""
 
@@ -58,6 +76,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _list_experiments()
     if arguments.command == "explain":
         return _explain(arguments.experiment, parser)
+    if arguments.command == "run":
+        return _run(arguments.experiment, parser)
 
     parser.error(f"unknown command: {arguments.command}")
 

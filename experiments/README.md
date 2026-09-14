@@ -1,6 +1,6 @@
 # Experiments
 
-This directory will contain executable, milestone-scoped investigations of
+This directory contains executable, milestone-scoped investigations of
 difficult AI systems properties.
 
 An implemented experiment must follow the
@@ -9,5 +9,5 @@ state its evidence, assumptions, guarantee, and non-guarantees. Failed or
 inconclusive observations remain valid evidence and must not be rewritten as
 success.
 
-M0 contains no experiment implementations. The seven registered experiments
-are `planned`; use `uv run ai-systems list` to inspect their current status.
+M1 implements `evidence-contracts`. The other six registered experiments remain
+`planned`; use `uv run ai-systems list` to inspect their current status.

@@ -1,13 +1,17 @@
 """Canonical metadata for public experiments."""
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
+
+from ai_systems.experiments.evidence_contracts import run_experiment
 
 
 class ExperimentStatus(StrEnum):
     """Lifecycle states exposed by the public experiment registry."""
 
     PLANNED = "planned"
+    AVAILABLE = "available"
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,6 +25,7 @@ class Experiment:
     status: ExperimentStatus
     engineering_question: str
     intended_invariant: str
+    runner: Callable[[], int] | None = None
 
 
 EXPERIMENTS: tuple[Experiment, ...] = (
@@ -29,9 +34,17 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Evidence Contracts",
         milestone="M1",
         area="evidence",
-        status=ExperimentStatus.PLANNED,
-        engineering_question="How can evidence remain attributable and verifiable?",
-        intended_invariant="Accepted evidence preserves its declared provenance.",
+        status=ExperimentStatus.AVAILABLE,
+        engineering_question=(
+            "How can downstream software reject evidence relationships that conflict "
+            "with recorded identity and provenance?"
+        ),
+        intended_invariant=(
+            "Under the declared identity/version model, an accepted evidence "
+            "selection contains only known fragments whose recorded provenance "
+            "equals the selection's declared provenance."
+        ),
+        runner=run_experiment,
     ),
     Experiment(
         identifier="evaluation-oracle-integrity",
@@ -112,6 +125,14 @@ _EXPERIMENTS_BY_ID = {experiment.identifier: experiment for experiment in EXPERI
 
 if len(_EXPERIMENTS_BY_ID) != len(EXPERIMENTS):
     raise RuntimeError("experiment identifiers must be unique")
+
+for _experiment in EXPERIMENTS:
+    if (_experiment.status is ExperimentStatus.AVAILABLE) != (
+        _experiment.runner is not None
+    ):
+        raise RuntimeError(
+            f"experiment status and runner disagree: {_experiment.identifier}"
+        )
 
 
 def get_experiment(identifier: str) -> Experiment | None:
