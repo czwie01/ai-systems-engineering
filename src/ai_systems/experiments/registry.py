@@ -4,7 +4,12 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
-from ai_systems.experiments.evidence_contracts import run_experiment
+from ai_systems.experiments.evaluation_oracle_integrity import (
+    run_experiment as run_evaluation_oracle_integrity,
+)
+from ai_systems.experiments.evidence_contracts import (
+    run_experiment as run_evidence_contracts,
+)
 
 
 class ExperimentStatus(StrEnum):
@@ -44,22 +49,24 @@ EXPERIMENTS: tuple[Experiment, ...] = (
             "selection contains only known fragments whose recorded provenance "
             "equals the selection's declared provenance."
         ),
-        runner=run_experiment,
+        runner=run_evidence_contracts,
     ),
     Experiment(
         identifier="evaluation-oracle-integrity",
         name="Evaluation Oracle Integrity",
         milestone="M2",
         area="evaluation",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question=(
             "How can an evaluator reject unsupported claims instead of passing on "
             "citation validity alone?"
         ),
         intended_invariant=(
-            "A passing verdict requires the evaluated claims to satisfy the evidence "
-            "checks that the verdict explicitly claims to establish."
+            "Under the explicit atomic support model, a passing verdict requires "
+            "every represented claim requirement to be included in the evaluator's "
+            "checked evidence support."
         ),
+        runner=run_evaluation_oracle_integrity,
     ),
     Experiment(
         identifier="failure-semantics",
