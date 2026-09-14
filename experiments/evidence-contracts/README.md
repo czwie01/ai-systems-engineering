@@ -78,15 +78,16 @@ This experiment does not establish:
 - correctness of provenance recorded before validation;
 - coverage of every possible provenance relationship.
 
-Claim support and evaluation-oracle integrity remain M2 concerns.
+Claim support is a separate concern demonstrated by
+`evaluation-oracle-integrity`; this experiment does not establish it.
 
 ## Reusable capability
 
 No primitive is promoted into a shared library in M1. The experiment-local
-catalog and guard demonstrate provider-independent semantics, but one narrow
-experiment is not enough evidence that their current API is a durable shared
-boundary. Later experiments may justify extracting the identity/provenance
-guard without its scenario or presentation code.
+catalog and guard demonstrate provider-independent semantics, but v0.1.0 still
+does not treat this API as a durable shared boundary. Later experiments may
+justify extracting the identity/provenance guard without its scenario or
+presentation code.
 
 ## Related decision
 

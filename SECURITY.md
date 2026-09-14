@@ -2,9 +2,9 @@
 
 ## Supported versions
 
-The project is pre-release and has no released version. Security fixes are
-applied to the default branch; no older version line currently receives
-separate support.
+The current version line is 0.1.x. This is an Alpha reference boundary, not a
+1.x compatibility promise. Security fixes are applied to the default branch;
+no older version line currently receives separate support.
 
 ## Reporting a vulnerability
 
