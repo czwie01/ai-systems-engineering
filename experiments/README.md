@@ -9,6 +9,6 @@ state its evidence, assumptions, guarantee, and non-guarantees. Failed or
 inconclusive observations remain valid evidence and must not be rewritten as
 success.
 
-M1 implements `evidence-contracts`, and M2 implements
-`evaluation-oracle-integrity`. The other five registered experiments remain
-`planned`; use `uv run ai-systems list` to inspect their current status.
+v0.1.0 contains `evidence-contracts` (M1) and `evaluation-oracle-integrity`
+(M2). The other five registered experiments remain `planned`; use
+`uv run ai-systems list` to inspect their current status.

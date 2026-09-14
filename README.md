@@ -8,10 +8,10 @@ distributed effects, and incomplete evidence. That combination makes ordinary
 questions—what happened, whether a result is correct, and whether an operation
 is safe to retry—surprisingly difficult to answer.
 
-**Current status: Evaluation Oracle Integrity / M2.** The repository now
-distinguishes valid evidence relationships from valid claim-support verdicts.
-M1 and M2 are executable; M3–M7 remain planned. The v0.1 release checkpoint has
-not been released.
+**Current status: v0.1.0 — Evidence & Evaluation.** Two executable experiments
+distinguish a valid evidence relationship from a supported generated claim.
+M3–M7 remain planned. This version is an Alpha reference boundary, not a
+production-ready library or a 1.x compatibility promise.
 
 ## Run it now
 
@@ -35,6 +35,20 @@ intended invariant for one registered experiment. Unknown identifiers fail
 with a non-zero exit status. `run` executes only experiments marked
 `available`.
 
+## What's in v0.1.0
+
+1. `evidence-contracts` shows that known evidence identities are not enough.
+   A deterministic contract still rejects fragments whose recorded provenance
+   conflicts with the selection's declared provenance.
+2. `evaluation-oracle-integrity` shows that valid citations are not enough.
+   Under an explicit atomic support model, every represented claim requirement
+   must be supported before a passing verdict.
+
+Read them in that order. M1-valid evidence is a necessary input to M2, not a
+passing evaluation result. M3–M7, a shared library API, and PyPI publication
+are outside this version. See [CHANGELOG.md](CHANGELOG.md) for the compact
+release record.
+
 ## Architecture
 
 - `src/ai_systems/experiments/` is the canonical experiment metadata registry.
@@ -54,7 +68,7 @@ See [Architecture](docs/architecture.md) and the
 | --- | --- | --- | --- |
 | M1 | `evidence-contracts` | evidence | available |
 | M2 | `evaluation-oracle-integrity` | evaluation | available |
-| v0.1 | Evidence & Evaluation | release checkpoint | planned |
+| v0.1 | Evidence & Evaluation | release checkpoint | v0.1.0 |
 | M3 | `failure-semantics` | execution | planned |
 | M4 | `ambiguous-completion` | reliability | planned |
 | M5 | `operation-provenance` | observability | planned |
@@ -69,10 +83,10 @@ A roadmap entry is not evidence that its invariant holds.
 
 Every completed experiment must state its demonstrated guarantee, assumptions,
 evidence, and non-guarantees. Planned invariants express what an experiment
-will investigate; they are not current guarantees. M1 demonstrates a narrow
-identity/provenance compatibility guarantee. M2 demonstrates that, under an
-explicit atomic support model, a passing verdict checks every represented claim
-requirement against recorded evidence support.
+will investigate; they are not current guarantees. v0.1.0 contains the M1
+identity/provenance compatibility guarantee and the M2 explicit claim-support
+coverage guarantee. It does not claim a stable public API or production
+readiness.
 
 Read the full [guarantee model](docs/guarantees.md).
 

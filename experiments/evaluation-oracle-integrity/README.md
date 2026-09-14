@@ -95,9 +95,8 @@ semantic understanding.
 ## Reusable capability
 
 No reusable primitive promoted. M1 and M2 expose related but distinct
-boundaries: evidence relationship validity and claim-support coverage. Two
-synthetic scenarios do not yet justify a stable shared API independent of their
-experiment-local representations and presentation needs.
+boundaries: evidence relationship validity and claim-support coverage. v0.1.0
+does not treat either experiment-local API as a stable shared boundary.
 
 ## Related decision
 

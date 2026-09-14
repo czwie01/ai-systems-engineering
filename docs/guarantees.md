@@ -18,7 +18,10 @@ tested.
 
 ## Current guarantees
 
-M0 establishes repository structure, discovery metadata, and offline checks.
+v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
+are complementary: a valid evidence relationship is not a passing
+claim-support verdict. M0 remains the repository and discovery foundation.
+
 M1 adds one demonstrated evidence relationship guarantee:
 
 > Given a catalog with unique immutable evidence identities and correct
