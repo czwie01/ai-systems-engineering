@@ -124,8 +124,7 @@ def run_experiment() -> int:
         or not naive_accepts
         or protected_verdict.passed
         or protected_verdict.reason is not RejectionReason.UNSUPPORTED_REQUIREMENT
-        or protected_verdict.unsupported_requirement_ids
-        != ("supports-python-3.14",)
+        or protected_verdict.unsupported_requirement_ids != ("supports-python-3.14",)
     ):
         print("UNEXPECTED OBSERVATION: experiment assertions did not hold")
         return 1

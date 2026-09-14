@@ -61,10 +61,7 @@ def test_run_evaluation_oracle_integrity_succeeds(
     assert "NAIVE EVALUATOR" in output
     assert "claim support requirements: NOT CHECKED" in output
     assert "INTEGRITY EVALUATOR" in output
-    assert (
-        "verdict: REJECTED "
-        "(unsupported-requirement: supports-python-3.14)" in output
-    )
+    assert "verdict: REJECTED (unsupported-requirement: supports-python-3.14)" in output
     assert "GUARANTEE" in output
     assert "NON-GUARANTEE" in output
 
