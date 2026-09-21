@@ -322,9 +322,7 @@ async def run_phase(root: Path, phase: str) -> None:
 
         receipt = {
             "framework": "microsoft-agent-framework-core",
-            "framework_version": importlib.metadata.version(
-                "agent-framework-core"
-            ),
+            "framework_version": importlib.metadata.version("agent-framework-core"),
             "state_store": "file-checkpoint-storage",
             "fresh_controller_boundaries": 2,
             "human_gates": ["intent", "promotion"],
