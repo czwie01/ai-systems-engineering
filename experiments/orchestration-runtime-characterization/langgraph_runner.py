@@ -147,14 +147,9 @@ def _initial_state() -> State:
 
 def _assert_paused_on(graph, config: dict[str, object], gate: str) -> None:
     snapshot = graph.get_state(config)
-    interrupts = [
-        item.value
-        for task in snapshot.tasks
-        for item in task.interrupts
-    ]
+    interrupts = [item.value for task in snapshot.tasks for item in task.interrupts]
     assert any(
-        isinstance(value, dict) and value.get("gate") == gate
-        for value in interrupts
+        isinstance(value, dict) and value.get("gate") == gate for value in interrupts
     ), (gate, interrupts)
 
 
