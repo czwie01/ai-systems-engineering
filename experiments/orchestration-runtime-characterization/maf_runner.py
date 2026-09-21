@@ -17,7 +17,6 @@ from agent_framework import (
     response_handler,
 )
 
-
 JOURNAL: Path
 
 
