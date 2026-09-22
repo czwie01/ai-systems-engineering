@@ -1,6 +1,6 @@
 # M1–M7 Synthesis and Promotion Map
 
-- Status: PROPOSED
+- Status: CURRENT
 - Date: 2026-09-22
 - Source: executable M1–M7 experiments and `docs/guarantees.md`
 - Decision scope: what the completed experiment sequence justifies next
