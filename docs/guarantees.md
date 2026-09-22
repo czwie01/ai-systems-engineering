@@ -20,7 +20,8 @@ tested.
 
 v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
 are complementary: a valid evidence relationship is not a passing
-claim-support verdict. M0 remains the repository and discovery foundation.
+claim-support verdict. Post-v0.1 development adds M3. M0 remains the repository
+and discovery foundation.
 
 M1 adds one demonstrated evidence relationship guarantee:
 
@@ -59,7 +60,26 @@ universal hallucination detection.
 M1 relationship validity is necessary input to M2, but it is not sufficient for
 a passing M2 claim-support verdict.
 
-M3–M7 invariants remain planned targets, not demonstrated guarantees. Their
+M3 adds one demonstrated failure-classification guarantee:
+
+> Given correct and authoritative values for external-effect visibility and
+> completion recording, failures with equivalent values receive the same
+> provider- and framework-independent completion classification regardless of
+> their raw provider/framework failure labels.
+
+The executable evidence contains three equivalent observation pairs with
+deliberately different raw labels: no visible effect, visible effect without
+recorded completion, and visible effect with recorded completion. The classifier
+maps them respectively to `definite-no-effect`, `ambiguous-completion`, and
+`completion-recorded`. It also rejects the inconsistent observation
+"completion recorded while effect absent" under the experiment model.
+
+This guarantee assumes the two observation facts are correct, authoritative, and
+sufficient for the declared model. It does not establish exactly-once effects,
+safe retries, reconciliation, durable dispatch, operation-provenance
+completeness, distributed authority, or that every runtime exposes those facts.
+
+M4–M7 invariants remain planned targets, not demonstrated guarantees. Their
 registry descriptions communicate intent and do not claim implementation.
 
 ## Illustrative planned example

@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- M3 `failure-semantics` adds a provider- and framework-neutral classification
+  for observable completion state: `definite-no-effect`,
+  `ambiguous-completion`, and `completion-recorded`.
+- The optional crash-boundary characterization connects that vocabulary to
+  LangGraph and Microsoft Agent Framework without adding either framework to the
+  default dependency set.
+- M4, M5, M6, and M7 remain planned; M3 does not claim retry safety,
+  exactly-once effects, provenance completeness, concurrency safety, or durable
+  dispatch.
+
 ## v0.1.0 — Evidence & Evaluation
 
 The first public reference boundary of AI Systems Engineering.
