@@ -20,8 +20,8 @@ tested.
 
 v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
 are complementary: a valid evidence relationship is not a passing
-claim-support verdict. Post-v0.1 development adds M3. M0 remains the repository
-and discovery foundation.
+claim-support verdict. Post-v0.1 development adds M3 and M4. M0 remains the
+repository and discovery foundation.
 
 M1 adds one demonstrated evidence relationship guarantee:
 
@@ -79,15 +79,26 @@ sufficient for the declared model. It does not establish exactly-once effects,
 safe retries, reconciliation, durable dispatch, operation-provenance
 completeness, distributed authority, or that every runtime exposes those facts.
 
-M4–M7 invariants remain planned targets, not demonstrated guarantees. Their
+M4 adds one demonstrated ambiguous-completion retry guarantee:
+
+> Given stable operation identity and complete stable intent, retained
+> authoritative idempotency state, and an atomic boundary that binds the
+> idempotency result to the application-visible effect, serial retries of one
+> logical operation produce at most one application-visible effect.
+
+The executable evidence includes a naive retry control that produces two visible
+effects, a same-operation retry that replays the prior result with one visible
+effect, deterministic rejection of the same operation id with different intent,
+and a retention control showing that forgetting the idempotency record removes
+the at-most-one guarantee.
+
+This guarantee assumes that operation identity and intent are correct and stable,
+the idempotency record is authoritative and retained for the whole retry window,
+and the effect/result binding is atomic under the experiment model. It does not
+establish exactly-once delivery or execution, safety after retention expiry,
+concurrent-caller correctness, atomicity across arbitrary third-party systems,
+provider-native idempotency, durable dispatch, complete operation provenance, or
+shared multi-actor authority.
+
+M5–M7 invariants remain planned targets, not demonstrated guarantees. Their
 registry descriptions communicate intent and do not claim implementation.
-
-## Illustrative planned example
-
-The `ambiguous-completion` experiment plans to investigate whether retries can
-avoid duplicate logical operations after uncertain completion. Any later
-guarantee would need to identify assumptions such as identifier stability,
-storage behavior, and the precise failure window. It would not automatically
-prove exactly-once delivery or correctness under every infrastructure failure.
-
-This example is illustrative only; the experiment is not implemented.
