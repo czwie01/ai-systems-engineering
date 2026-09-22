@@ -44,6 +44,7 @@ def test_stable_idempotency_key_survives_sink_reopen(tmp_path: Path) -> None:
 
     assert first.decision is EffectDecision.APPLIED
     assert replay.decision is EffectDecision.REPLAYED
+    assert replay.effect_id == first.effect_id
     assert IdempotentEffectSink(path).visible_effect_count() == 1
 
 
@@ -82,3 +83,20 @@ def test_operation_fingerprint_is_unambiguous_for_embedded_separators() -> None:
     )
 
     assert operation_fingerprint(left) != operation_fingerprint(right)
+
+
+def test_expired_idempotency_record_ends_at_most_one_guarantee(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "retention.sqlite"
+    operation = _operation()
+    sink = IdempotentEffectSink(path)
+
+    first = sink.apply(operation)
+    sink.expire(operation.operation_id)
+    retry = sink.apply(operation)
+
+    assert first.decision is EffectDecision.APPLIED
+    assert retry.decision is EffectDecision.APPLIED
+    assert retry.effect_id != first.effect_id
+    assert sink.visible_effect_count() == 2
