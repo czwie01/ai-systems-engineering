@@ -122,6 +122,7 @@ uv run ai-systems list
 uv run ai-systems run evidence-contracts
 uv run ai-systems run evaluation-oracle-integrity
 uv run ai-systems run failure-semantics
+uv run ai-systems run ambiguous-completion
 ```
 
 To apply formatting locally, run `uv run ruff format .`. Development and CI are
