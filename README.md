@@ -12,7 +12,9 @@ is safe to retry—surprisingly difficult to answer.
 remains the latest release checkpoint. Development now includes M3
 `failure-semantics`, a provider- and framework-neutral completion
 classification experiment plus M4 `ambiguous-completion`, which demonstrates a
-stable logical-operation identity and idempotent retry boundary. M5
+stable logical-operation identity and idempotent retry boundary whose
+at-most-one guarantee is explicitly scoped to the idempotency-record retention
+window. M5
 `operation-provenance` now adds a durable audit-history contract for attempts,
 completion observations, recovery decisions, and observed effect identity.
 M6–M7 remain planned. This project is still an Alpha
@@ -102,8 +104,8 @@ evidence, and non-guarantees. Planned invariants express what an experiment
 will investigate; they are not current guarantees. v0.1.0 contains the M1 identity/provenance compatibility guarantee and the M2
 explicit claim-support coverage guarantee. Post-v0.1 development adds the M3
 completion-classification guarantee, the M4 stable-operation-id/idempotent
-retry guarantee, and the M5 durable operation-provenance guarantee under their
-explicit assumptions. It does not claim a stable
+retry guarantee within its explicit retention window, and the M5 durable
+operation-provenance guarantee under their explicit assumptions. It does not claim a stable
 public API or production readiness.
 
 Read the full [guarantee model](docs/guarantees.md).
