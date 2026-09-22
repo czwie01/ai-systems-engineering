@@ -20,13 +20,14 @@ def test_experiment_identifiers_are_unique() -> None:
     assert len(identifiers) == len(set(identifiers))
 
 
-def test_only_m1_through_m4_are_available() -> None:
+def test_only_m1_through_m5_are_available() -> None:
     statuses = {experiment.identifier: experiment.status for experiment in EXPERIMENTS}
 
     assert statuses["evidence-contracts"] is ExperimentStatus.AVAILABLE
     assert statuses["evaluation-oracle-integrity"] is ExperimentStatus.AVAILABLE
     assert statuses["failure-semantics"] is ExperimentStatus.AVAILABLE
     assert statuses["ambiguous-completion"] is ExperimentStatus.AVAILABLE
+    assert statuses["operation-provenance"] is ExperimentStatus.AVAILABLE
     assert all(
         status is ExperimentStatus.PLANNED
         for identifier, status in statuses.items()
@@ -36,6 +37,7 @@ def test_only_m1_through_m4_are_available() -> None:
             "evaluation-oracle-integrity",
             "failure-semantics",
             "ambiguous-completion",
+            "operation-provenance",
         }
     )
 

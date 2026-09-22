@@ -16,6 +16,9 @@ from ai_systems.experiments.evidence_contracts import (
 from ai_systems.experiments.failure_semantics import (
     run_experiment as run_failure_semantics,
 )
+from ai_systems.experiments.operation_provenance import (
+    run_experiment as run_operation_provenance,
+)
 
 
 class ExperimentStatus(StrEnum):
@@ -106,13 +109,14 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Operation Provenance",
         milestone="M5",
         area="observability",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question=(
             "How can an operation retain an auditable execution history?"
         ),
         intended_invariant=(
             "Each operation records the decisions and effects needed for audit."
         ),
+        runner=run_operation_provenance,
     ),
     Experiment(
         identifier="concurrent-promotion",

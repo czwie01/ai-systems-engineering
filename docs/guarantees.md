@@ -20,8 +20,8 @@ tested.
 
 v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
 are complementary: a valid evidence relationship is not a passing
-claim-support verdict. Post-v0.1 development adds M3 and M4. M0 remains the
-repository and discovery foundation.
+claim-support verdict. Post-v0.1 development adds M3, M4, and M5. M0 remains
+the repository and discovery foundation.
 
 M1 adds one demonstrated evidence relationship guarantee:
 
@@ -98,5 +98,25 @@ execution or delivery, arbitrary provider idempotency, atomicity across an
 unrelated external provider and local database, concurrent fencing, complete
 operation provenance, or durable dispatch.
 
-M5–M7 invariants remain planned targets, not demonstrated guarantees. Their
+M5 adds one demonstrated operation-provenance guarantee:
+
+> Under the declared event model, a valid provenance journal preserves one
+> operation's immutable intent identity, ordered attempts, completion
+> observations, ambiguous-completion recovery decisions, observed effect
+> identities, and final disposition well enough to distinguish a recovered
+> retry from an otherwise identical direct-success final summary.
+
+The executable evidence first proves that a final-state-only summary collapses a
+direct success and an ambiguous-completion recovery into the same final result.
+The protected journal retains the different attempt/mechanism/completion path,
+rejects a removed recovery decision as `missing-recovery-decision`, rejects
+invalid references and mixed intent, and reconstructs the same audit view after
+the SQLite journal is reopened.
+
+The guarantee assumes journal contents and recorded observations are correct
+inputs. It does not establish cryptographic authenticity, tamper evidence,
+external-effect truth, full distributed tracing, hidden reasoning capture,
+concurrent fencing, or durable dispatch.
+
+M6–M7 invariants remain planned targets, not demonstrated guarantees. Their
 registry descriptions communicate intent and do not claim implementation.

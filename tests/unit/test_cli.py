@@ -12,8 +12,8 @@ def test_list_exposes_every_registered_experiment_truthfully(
     output = capsys.readouterr().out
     for experiment in EXPERIMENTS:
         assert experiment.identifier in output
-    assert output.count("planned") == len(EXPERIMENTS) - 4
-    assert output.count("available") == 4
+    assert output.count("planned") == len(EXPERIMENTS) - 5
+    assert output.count("available") == 5
 
 
 def test_explain_registered_experiment(
@@ -90,6 +90,22 @@ def test_run_ambiguous_completion_succeeds(
     assert "PROTECTED RETRY" in output
     assert "visible effects: 1" in output
     assert "idempotency-conflict" in output
+    assert "GUARANTEE" in output
+    assert "NON-GUARANTEE" in output
+
+
+def test_run_operation_provenance_succeeds(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["run", "operation-provenance"]) == 0
+
+    output = capsys.readouterr().out
+    assert "FINAL-STATE-ONLY CONTROL" in output
+    assert "HISTORIES COLLAPSED TO THE SAME FINAL SUMMARY" in output
+    assert "PROVENANCE AUDIT" in output
+    assert "RECOVERY PATH RETAINED" in output
+    assert "missing-recovery-decision" in output
+    assert "DURABILITY CHECK" in output
     assert "GUARANTEE" in output
     assert "NON-GUARANTEE" in output
 
