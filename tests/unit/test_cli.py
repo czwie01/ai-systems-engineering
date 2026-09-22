@@ -12,8 +12,8 @@ def test_list_exposes_every_registered_experiment_truthfully(
     output = capsys.readouterr().out
     for experiment in EXPERIMENTS:
         assert experiment.identifier in output
-    assert output.count("planned") == len(EXPERIMENTS) - 5
-    assert output.count("available") == 5
+    assert output.count("planned") == len(EXPERIMENTS) - 6
+    assert output.count("available") == 6
 
 
 def test_explain_registered_experiment(
@@ -108,6 +108,23 @@ def test_run_operation_provenance_succeeds(
     assert "RECOVERY PATH RETAINED" in output
     assert "missing-recovery-decision" in output
     assert "DURABILITY CHECK" in output
+    assert "GUARANTEE" in output
+    assert "NON-GUARANTEE" in output
+
+
+def test_run_concurrent_promotion_succeeds(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["run", "concurrent-promotion"]) == 0
+
+    output = capsys.readouterr().out
+    assert "NAIVE STALE-WRITE CONTROL" in output
+    assert "BOTH STALE DECISIONS WERE ACCEPTED" in output
+    assert "GENERATION-FENCED PROMOTION" in output
+    assert "EXACTLY ONE TRANSITION ACCEPTED" in output
+    assert "stale-generation" in output
+    assert "ABA / STATE-ONLY CONTROL" in output
+    assert "GENERATION DISTINGUISHED STALE AUTHORITY" in output
     assert "GUARANTEE" in output
     assert "NON-GUARANTEE" in output
 
