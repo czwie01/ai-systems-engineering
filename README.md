@@ -12,8 +12,10 @@ is safe to retry—surprisingly difficult to answer.
 remains the latest release checkpoint. Development now includes M3
 `failure-semantics`, a provider- and framework-neutral completion
 classification experiment plus M4 `ambiguous-completion`, which demonstrates a
-stable logical-operation identity and idempotent retry boundary. M5–M7 remain
-planned. This project is still an Alpha
+stable logical-operation identity and idempotent retry boundary. M5
+`operation-provenance` now adds a durable audit-history contract for attempts,
+completion observations, recovery decisions, and observed effect identity.
+M6–M7 remain planned. This project is still an Alpha
 reference boundary, not a production-ready library or a 1.x compatibility
 promise.
 
@@ -35,6 +37,8 @@ uv run ai-systems explain failure-semantics
 uv run ai-systems run failure-semantics
 uv run ai-systems explain ambiguous-completion
 uv run ai-systems run ambiguous-completion
+uv run ai-systems explain operation-provenance
+uv run ai-systems run operation-provenance
 ```
 
 `list` reports all registered experiments and their honest lifecycle status.
@@ -55,9 +59,9 @@ intentionally narrow and executable.
   requirement must be supported before a passing verdict.
 
 Read them in that order. A valid evidence relationship is not a supported
-generated claim. The current development branch additionally contains M3
-`failure-semantics` and M4 `ambiguous-completion`; those experiments are not
-part of the v0.1.0 release checkpoint. M5–M7 remain planned. This Alpha boundary is not a stable public
+generated claim. The current development branch additionally contains M3 `failure-semantics`,
+M4 `ambiguous-completion`, and M5 `operation-provenance`; those experiments
+are not part of the v0.1.0 release checkpoint. M6–M7 remain planned. This Alpha boundary is not a stable public
 library API and is not published to PyPI. See [CHANGELOG.md](CHANGELOG.md) for
 the release record.
 
@@ -83,7 +87,7 @@ See [Architecture](docs/architecture.md) and the
 | v0.1 | Evidence & Evaluation | release checkpoint | v0.1.0 |
 | M3 | `failure-semantics` | execution | available |
 | M4 | `ambiguous-completion` | reliability | available |
-| M5 | `operation-provenance` | observability | planned |
+| M5 | `operation-provenance` | observability | available |
 | v0.2 | Reliable AI Execution | release checkpoint | planned |
 | M6 | `concurrent-promotion` | coordination | planned |
 | M7 | `durable-dispatch` | reliability | planned |
@@ -97,8 +101,9 @@ Every completed experiment must state its demonstrated guarantee, assumptions,
 evidence, and non-guarantees. Planned invariants express what an experiment
 will investigate; they are not current guarantees. v0.1.0 contains the M1 identity/provenance compatibility guarantee and the M2
 explicit claim-support coverage guarantee. Post-v0.1 development adds the M3
-completion-classification guarantee and the M4 stable-operation-id/idempotent
-retry guarantee under their explicit assumptions. It does not claim a stable
+completion-classification guarantee, the M4 stable-operation-id/idempotent
+retry guarantee, and the M5 durable operation-provenance guarantee under their
+explicit assumptions. It does not claim a stable
 public API or production readiness.
 
 Read the full [guarantee model](docs/guarantees.md).
@@ -124,6 +129,7 @@ uv run ai-systems run evidence-contracts
 uv run ai-systems run evaluation-oracle-integrity
 uv run ai-systems run failure-semantics
 uv run ai-systems run ambiguous-completion
+uv run ai-systems run operation-provenance
 ```
 
 To apply formatting locally, run `uv run ruff format .`. Development and CI are
