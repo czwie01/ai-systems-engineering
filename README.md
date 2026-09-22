@@ -18,7 +18,9 @@ window. M5
 `operation-provenance` now adds a durable audit-history contract for attempts,
 completion observations, recovery decisions, and observed effect identity. M6
 `concurrent-promotion` now demonstrates generation-fenced compare-and-swap for
-competing shared-state transitions. M7 remains planned. This project is still an Alpha
+competing shared-state transitions. M7 `durable-dispatch` now demonstrates an
+atomic durable handoff from committed authoritative state to retained dispatch
+intent, including effect-before-ack replay through the M4 idempotency boundary. This project is still an Alpha
 reference boundary, not a production-ready library or a 1.x compatibility
 promise.
 
@@ -44,6 +46,8 @@ uv run ai-systems explain operation-provenance
 uv run ai-systems run operation-provenance
 uv run ai-systems explain concurrent-promotion
 uv run ai-systems run concurrent-promotion
+uv run ai-systems explain durable-dispatch
+uv run ai-systems run durable-dispatch
 ```
 
 `list` reports all registered experiments and their honest lifecycle status.
@@ -65,9 +69,10 @@ intentionally narrow and executable.
 
 Read them in that order. A valid evidence relationship is not a supported
 generated claim. The current development branch additionally contains M3 `failure-semantics`,
-M4 `ambiguous-completion`, M5 `operation-provenance`, and M6
-`concurrent-promotion`; those experiments are not part of the v0.1.0 release
-checkpoint. M7 remains planned. This Alpha boundary is not a stable public
+M4 `ambiguous-completion`, M5 `operation-provenance`, M6
+`concurrent-promotion`, and M7 `durable-dispatch`; those experiments are not
+part of the v0.1.0 release checkpoint. The planned M1–M7 experiment sequence is
+now executable; release/promotion synthesis remains separate. This Alpha boundary is not a stable public
 library API and is not published to PyPI. See [CHANGELOG.md](CHANGELOG.md) for
 the release record.
 
@@ -96,7 +101,7 @@ See [Architecture](docs/architecture.md) and the
 | M5 | `operation-provenance` | observability | available |
 | v0.2 | Reliable AI Execution | release checkpoint | planned |
 | M6 | `concurrent-promotion` | coordination | available |
-| M7 | `durable-dispatch` | reliability | planned |
+| M7 | `durable-dispatch` | reliability | available |
 | v0.3 | Safe Agentic State Changes | release checkpoint | planned |
 
 A roadmap entry is not evidence that its invariant holds.
@@ -109,8 +114,8 @@ will investigate; they are not current guarantees. v0.1.0 contains the M1 identi
 explicit claim-support coverage guarantee. Post-v0.1 development adds the M3
 completion-classification guarantee, the M4 stable-operation-id/idempotent
 retry guarantee within its explicit retention window, and the M5 durable
-operation-provenance guarantee and the M6 generation-fenced promotion guarantee
-under their explicit assumptions. It does not claim a stable
+operation-provenance guarantee, the M6 generation-fenced promotion guarantee,
+and the M7 durable-dispatch guarantee under their explicit assumptions. It does not claim a stable
 public API or production readiness.
 
 Read the full [guarantee model](docs/guarantees.md).
@@ -138,6 +143,7 @@ uv run ai-systems run failure-semantics
 uv run ai-systems run ambiguous-completion
 uv run ai-systems run operation-provenance
 uv run ai-systems run concurrent-promotion
+uv run ai-systems run durable-dispatch
 ```
 
 To apply formatting locally, run `uv run ruff format .`. Development and CI are

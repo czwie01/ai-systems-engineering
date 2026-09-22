@@ -10,6 +10,9 @@ from ai_systems.experiments.ambiguous_completion import (
 from ai_systems.experiments.concurrent_promotion import (
     run_experiment as run_concurrent_promotion,
 )
+from ai_systems.experiments.durable_dispatch import (
+    run_experiment as run_durable_dispatch,
+)
 from ai_systems.experiments.evaluation_oracle_integrity import (
     run_experiment as run_evaluation_oracle_integrity,
 )
@@ -141,11 +144,17 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Durable Dispatch",
         milestone="M7",
         area="reliability",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question=(
             "How can committed intent reliably produce an external effect?"
         ),
-        intended_invariant="Committed dispatch intent is not silently lost.",
+        intended_invariant=(
+            "Given atomic commit of authoritative state plus durable dispatch "
+            "intent, retention of unacknowledged intent, and eventual dispatcher "
+            "rescanning, committed dispatch intent remains discoverable across "
+            "process failure until acknowledgement."
+        ),
+        runner=run_durable_dispatch,
     ),
 )
 
