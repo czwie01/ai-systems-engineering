@@ -20,7 +20,7 @@ def test_experiment_identifiers_are_unique() -> None:
     assert len(identifiers) == len(set(identifiers))
 
 
-def test_only_m1_through_m6_are_available() -> None:
+def test_all_registered_experiments_are_available() -> None:
     statuses = {experiment.identifier: experiment.status for experiment in EXPERIMENTS}
 
     assert statuses["evidence-contracts"] is ExperimentStatus.AVAILABLE
@@ -29,19 +29,8 @@ def test_only_m1_through_m6_are_available() -> None:
     assert statuses["ambiguous-completion"] is ExperimentStatus.AVAILABLE
     assert statuses["operation-provenance"] is ExperimentStatus.AVAILABLE
     assert statuses["concurrent-promotion"] is ExperimentStatus.AVAILABLE
-    assert all(
-        status is ExperimentStatus.PLANNED
-        for identifier, status in statuses.items()
-        if identifier
-        not in {
-            "evidence-contracts",
-            "evaluation-oracle-integrity",
-            "failure-semantics",
-            "ambiguous-completion",
-            "operation-provenance",
-            "concurrent-promotion",
-        }
-    )
+    assert statuses["durable-dispatch"] is ExperimentStatus.AVAILABLE
+    assert all(status is ExperimentStatus.AVAILABLE for status in statuses.values())
 
 
 def test_available_status_matches_executable_runner() -> None:
