@@ -90,6 +90,8 @@ def test_run_ambiguous_completion_succeeds(
     assert "PROTECTED RETRY" in output
     assert "visible effects: 1" in output
     assert "idempotency-conflict" in output
+    assert "RETENTION BOUNDARY" in output
+    assert "AT-MOST-ONE GUARANTEE NO LONGER AVAILABLE" in output
     assert "GUARANTEE" in output
     assert "NON-GUARANTEE" in output
 
