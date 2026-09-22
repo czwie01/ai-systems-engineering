@@ -12,8 +12,8 @@ def test_list_exposes_every_registered_experiment_truthfully(
     output = capsys.readouterr().out
     for experiment in EXPERIMENTS:
         assert experiment.identifier in output
-    assert output.count("planned") == len(EXPERIMENTS) - 3
-    assert output.count("available") == 3
+    assert output.count("planned") == len(EXPERIMENTS) - 4
+    assert output.count("available") == 4
 
 
 def test_explain_registered_experiment(
@@ -75,6 +75,21 @@ def test_run_failure_semantics_succeeds(
     assert "RAW FAILURE CONTROL" in output
     assert "APPLICATION CLASSIFICATION" in output
     assert "ambiguous-completion" in output
+    assert "GUARANTEE" in output
+    assert "NON-GUARANTEE" in output
+
+
+def test_run_ambiguous_completion_succeeds(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["run", "ambiguous-completion"]) == 0
+
+    output = capsys.readouterr().out
+    assert "AMBIGUOUS COMPLETION CONTROL" in output
+    assert "result: DUPLICATED" in output
+    assert "PROTECTED RETRY" in output
+    assert "visible effects: 1" in output
+    assert "idempotency-conflict" in output
     assert "GUARANTEE" in output
     assert "NON-GUARANTEE" in output
 
