@@ -7,6 +7,9 @@ from enum import StrEnum
 from ai_systems.experiments.ambiguous_completion import (
     run_experiment as run_ambiguous_completion,
 )
+from ai_systems.experiments.concurrent_promotion import (
+    run_experiment as run_concurrent_promotion,
+)
 from ai_systems.experiments.evaluation_oracle_integrity import (
     run_experiment as run_evaluation_oracle_integrity,
 )
@@ -124,9 +127,14 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Concurrent Agent State Transitions",
         milestone="M6",
         area="coordination",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question="How can concurrent actors safely promote shared state?",
-        intended_invariant="At most one valid transition wins from a given state.",
+        intended_invariant=(
+            "Given one authoritative record and atomic compare-and-swap on its "
+            "observed source state and generation, at most one competing transition "
+            "is accepted from one observed generation."
+        ),
+        runner=run_concurrent_promotion,
     ),
     Experiment(
         identifier="durable-dispatch",
