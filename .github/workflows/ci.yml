@@ -64,3 +64,5 @@ jobs:
           uv run ai-systems run operation-provenance
           uv run ai-systems explain concurrent-promotion
           uv run ai-systems run concurrent-promotion
+          uv run ai-systems explain durable-dispatch
+          uv run ai-systems run durable-dispatch
