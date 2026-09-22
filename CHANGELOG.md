@@ -8,9 +8,12 @@
 - The optional crash-boundary characterization connects that vocabulary to
   LangGraph and Microsoft Agent Framework without adding either framework to the
   default dependency set.
-- M4, M5, M6, and M7 remain planned; M3 does not claim retry safety,
-  exactly-once effects, provenance completeness, concurrency safety, or durable
-  dispatch.
+- M4 `ambiguous-completion` adds a provider-neutral serial-retry idempotency
+  contract under explicit operation-identity, intent, retention, and atomicity
+  assumptions.
+- M5, M6, and M7 remain planned; M3/M4 do not claim exactly-once delivery or
+  execution, provenance completeness, concurrent-caller safety, shared
+  authority, or durable dispatch.
 
 ## v0.1.0 — Evidence & Evaluation
 
