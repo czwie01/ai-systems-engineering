@@ -20,8 +20,8 @@ tested.
 
 v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
 are complementary: a valid evidence relationship is not a passing
-claim-support verdict. Post-v0.1 development adds M3, M4, M5, and M6. M0
-remains the repository and discovery foundation.
+claim-support verdict. Post-v0.1 development adds M3 through M7. M0 remains
+the repository and discovery foundation.
 
 M1 adds one demonstrated evidence relationship guarantee:
 
@@ -145,5 +145,32 @@ not establish distributed consensus, fairness, lease semantics, dead-actor
 recovery, multi-record or multi-repository transactions, Git conflict
 prevention, or durable dispatch.
 
-M7 remains a planned target, not a demonstrated guarantee. Its registry
-description communicates intent and does not claim implementation.
+M7 adds one demonstrated durable-dispatch guarantee:
+
+> Given atomic commit of authoritative state plus durable dispatch intent,
+> retention of unacknowledged intents, and eventual rescanning by a dispatcher,
+> committed dispatch intent remains discoverable across process failure until it
+> is acknowledged.
+
+The executable evidence first commits authoritative state without its separate
+dispatch write and demonstrates the dual-write loss: after reopen, state says
+dispatch is required but no pending intent exists. The protected path commits
+authoritative state plus an outbox row in one SQLite transaction; after a
+simulated process failure and reopen, the pending intent remains discoverable
+and can be dispatched.
+
+A second failure boundary dispatches the external effect and then fails before
+outbox acknowledgement. The row remains pending. Replay reuses the dispatch id
+as the M4 logical operation id, the M4 idempotent sink returns the same effect
+without another visible effect, and the outbox row is then acknowledged.
+
+The guarantee assumes authoritative state and dispatch intent share one atomic
+durable commit boundary, pending intent is retained, and some dispatcher
+eventually runs again. It does not establish exactly-once delivery/execution, a
+liveness deadline, progress with no future dispatcher, global ordering,
+poison-message handling, cross-database atomicity, distributed consensus, or a
+preferred runtime such as Temporal.
+
+M1–M7 are now executable experiments. Completing the experiment sequence does
+not by itself promote every mechanism into a reusable library core or establish
+a production architecture.
