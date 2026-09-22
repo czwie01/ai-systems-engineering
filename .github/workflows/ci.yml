@@ -62,3 +62,5 @@ jobs:
           uv run ai-systems run ambiguous-completion
           uv run ai-systems explain operation-provenance
           uv run ai-systems run operation-provenance
+          uv run ai-systems explain concurrent-promotion
+          uv run ai-systems run concurrent-promotion

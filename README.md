@@ -16,8 +16,9 @@ stable logical-operation identity and idempotent retry boundary whose
 at-most-one guarantee is explicitly scoped to the idempotency-record retention
 window. M5
 `operation-provenance` now adds a durable audit-history contract for attempts,
-completion observations, recovery decisions, and observed effect identity.
-M6–M7 remain planned. This project is still an Alpha
+completion observations, recovery decisions, and observed effect identity. M6
+`concurrent-promotion` now demonstrates generation-fenced compare-and-swap for
+competing shared-state transitions. M7 remains planned. This project is still an Alpha
 reference boundary, not a production-ready library or a 1.x compatibility
 promise.
 
@@ -41,6 +42,8 @@ uv run ai-systems explain ambiguous-completion
 uv run ai-systems run ambiguous-completion
 uv run ai-systems explain operation-provenance
 uv run ai-systems run operation-provenance
+uv run ai-systems explain concurrent-promotion
+uv run ai-systems run concurrent-promotion
 ```
 
 `list` reports all registered experiments and their honest lifecycle status.
@@ -62,8 +65,9 @@ intentionally narrow and executable.
 
 Read them in that order. A valid evidence relationship is not a supported
 generated claim. The current development branch additionally contains M3 `failure-semantics`,
-M4 `ambiguous-completion`, and M5 `operation-provenance`; those experiments
-are not part of the v0.1.0 release checkpoint. M6–M7 remain planned. This Alpha boundary is not a stable public
+M4 `ambiguous-completion`, M5 `operation-provenance`, and M6
+`concurrent-promotion`; those experiments are not part of the v0.1.0 release
+checkpoint. M7 remains planned. This Alpha boundary is not a stable public
 library API and is not published to PyPI. See [CHANGELOG.md](CHANGELOG.md) for
 the release record.
 
@@ -91,7 +95,7 @@ See [Architecture](docs/architecture.md) and the
 | M4 | `ambiguous-completion` | reliability | available |
 | M5 | `operation-provenance` | observability | available |
 | v0.2 | Reliable AI Execution | release checkpoint | planned |
-| M6 | `concurrent-promotion` | coordination | planned |
+| M6 | `concurrent-promotion` | coordination | available |
 | M7 | `durable-dispatch` | reliability | planned |
 | v0.3 | Safe Agentic State Changes | release checkpoint | planned |
 
@@ -105,7 +109,8 @@ will investigate; they are not current guarantees. v0.1.0 contains the M1 identi
 explicit claim-support coverage guarantee. Post-v0.1 development adds the M3
 completion-classification guarantee, the M4 stable-operation-id/idempotent
 retry guarantee within its explicit retention window, and the M5 durable
-operation-provenance guarantee under their explicit assumptions. It does not claim a stable
+operation-provenance guarantee and the M6 generation-fenced promotion guarantee
+under their explicit assumptions. It does not claim a stable
 public API or production readiness.
 
 Read the full [guarantee model](docs/guarantees.md).
@@ -132,6 +137,7 @@ uv run ai-systems run evaluation-oracle-integrity
 uv run ai-systems run failure-semantics
 uv run ai-systems run ambiguous-completion
 uv run ai-systems run operation-provenance
+uv run ai-systems run concurrent-promotion
 ```
 
 To apply formatting locally, run `uv run ruff format .`. Development and CI are

@@ -17,8 +17,12 @@
   needed to distinguish a recovered retry from an otherwise identical final
   summary, including attempt identity, completion observations, recovery
   decisions, effect identity, and final disposition.
-- M6 and M7 remain planned; M3–M5 do not claim exactly-once execution/delivery,
-  tamper-proof provenance, concurrency safety, or durable dispatch.
+- M6 `concurrent-promotion` demonstrates that an atomic generation-fenced
+  compare-and-swap accepts at most one competing transition from one observed
+  generation, while the naive stale-write and ABA controls expose why state
+  values alone are insufficient.
+- M7 remains planned; M3–M6 do not claim exactly-once execution/delivery,
+  distributed consensus, multi-record atomicity, or durable dispatch.
 
 ## v0.1.0 — Evidence & Evaluation
 

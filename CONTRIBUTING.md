@@ -31,6 +31,7 @@ uv run ai-systems run evaluation-oracle-integrity
 uv run ai-systems run failure-semantics
 uv run ai-systems run ambiguous-completion
 uv run ai-systems run operation-provenance
+uv run ai-systems run concurrent-promotion
 ```
 
 Tests and examples must be deterministic and must not require credentials,
