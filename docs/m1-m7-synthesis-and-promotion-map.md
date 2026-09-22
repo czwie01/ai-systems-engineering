@@ -201,6 +201,42 @@ Examples of legitimate future triggers:
 
 "Seven milestones are complete" is not a trigger for M8.
 
+## Runtime sourcing principle
+
+> **OSS-first is a sourcing preference, not a correctness claim.**
+> Prefer maintained open-source/self-hostable mechanisms when they reduce
+> replacement cost and improve inspectability, but admit a runtime only when
+> observed behavior satisfies the consumer-owned semantic contract. The
+> contract remains independent; runtimes compete to realize it.
+
+This principle deliberately separates **openness** from **semantic fit**:
+
+- OpenTelemetry's specification principles explicitly require vendor-neutral,
+  loosely coupled telemetry, and its vendor guidance evaluates vendors against
+  the specification rather than making any vendor the source of semantics.
+- Twelve-Factor treats backing services as attached resources that should be
+  replaceable without application-code changes, which is the same loose-coupling
+  goal at a broader application boundary.
+- Temporal and LangGraph are both maintained MIT-licensed OSS candidates, but
+  those license facts establish inspectability/self-hostability options—not
+  M3–M7 conformance.
+
+References:
+
+- OpenTelemetry specification principles:
+  https://opentelemetry.io/docs/specs/otel/specification-principles/
+- OpenTelemetry vendor support:
+  https://opentelemetry.io/docs/specs/otel/vendors/
+- Twelve-Factor backing services:
+  https://www.12factor.net/backing-services
+- Temporal repository / MIT license:
+  https://github.com/temporalio/temporal
+- LangGraph package metadata / MIT license:
+  https://github.com/langchain-ai/langgraph/blob/main/libs/langgraph/pyproject.toml
+
+These references support the **portability and sourcing principle**. They do not
+establish semantic fit; S2 runtime conformance exists to test that separately.
+
 ## Runtime-selection implication
 
 The experiment sequence now supplies a **conformance target** rather than an
