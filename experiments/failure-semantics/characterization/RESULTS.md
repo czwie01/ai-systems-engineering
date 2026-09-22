@@ -137,3 +137,22 @@ R3 does not establish:
 The next milestone should consume the demonstrated
 `ambiguous-completion` case rather than starting another general framework
 benchmark.
+
+
+## Normalized-head revalidation
+
+After R2 PR #10 was accepted and squash-merged, this R3 branch was normalized to
+one commit directly on top of the accepted R2 state. No executable or result
+semantics changed during normalization.
+
+Final pre-merge revalidation before this note:
+
+- normalized characterization head: `4c7ad5fdf42e1c092562a71cde3431bb927e81a6`;
+- repository CI: run `35718660844` — Python 3.13 and Python 3.14 both successful;
+- failure-boundary characterization: run `35718660872` — all 8
+  framework/scenario/mode jobs successful.
+
+The earlier run ids above remain the original R3 evidence. This section binds the
+same characterized tree, after stack normalization, to the current `develop`
+lineage. The documentation-only commit containing this note must itself pass the
+normal repository CI before merge.
