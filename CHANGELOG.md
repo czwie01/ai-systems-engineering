@@ -9,8 +9,10 @@
   LangGraph and Microsoft Agent Framework without adding either framework to the
   default dependency set.
 - M4 `ambiguous-completion` demonstrates the stable logical-operation identity
-  and durable idempotency assumptions under which replay produces at most one
-  application-visible effect, while rejecting conflicting id reuse.
+  and durable atomic idempotency assumptions under which replay produces at most
+  one application-visible effect while the idempotency record is retained,
+  rejects conflicting id reuse, and explicitly demonstrates that pruning the
+  record ends that guarantee.
 - M5 `operation-provenance` demonstrates the minimal durable audit fields
   needed to distinguish a recovered retry from an otherwise identical final
   summary, including attempt identity, completion observations, recovery
