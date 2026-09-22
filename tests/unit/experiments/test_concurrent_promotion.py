@@ -14,8 +14,7 @@ def test_naive_concurrent_stale_writes_are_both_accepted(tmp_path: Path) -> None
 
     assert all(snapshot.generation == 0 for snapshot in result.observations)
     assert all(
-        snapshot.state is PromotionState.CANDIDATE
-        for snapshot in result.observations
+        snapshot.state is PromotionState.CANDIDATE for snapshot in result.observations
     )
     assert [item.decision for item in result.results].count(
         PromotionDecision.APPLIED
