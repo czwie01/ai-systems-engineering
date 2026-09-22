@@ -39,6 +39,7 @@ class EffectResult:
 
     decision: EffectDecision
     operation_id: str
+    effect_id: str
 
 
 class IdempotencyConflict(ValueError):
@@ -107,7 +108,7 @@ class NaiveEffectSink:
 
 
 class IdempotentEffectSink:
-    """Synthetic durable sink that deduplicates by logical operation identity."""
+    """Synthetic durable sink with retained idempotency knowledge."""
 
     __slots__ = ("_path",)
 
@@ -120,14 +121,24 @@ class IdempotentEffectSink:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS effects (
-                    operation_id TEXT PRIMARY KEY,
+                    effect_sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                    operation_id TEXT NOT NULL,
                     fingerprint TEXT NOT NULL
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS idempotency_records (
+                    operation_id TEXT PRIMARY KEY,
+                    fingerprint TEXT NOT NULL,
+                    effect_sequence INTEGER NOT NULL
                 )
                 """
             )
 
     def apply(self, operation: LogicalOperation) -> EffectResult:
-        """Apply once, replay safely, or reject conflicting id reuse."""
+        """Apply once, replay a retained result, or reject conflicting id reuse."""
 
         fingerprint = operation_fingerprint(operation)
 
@@ -135,37 +146,65 @@ class IdempotentEffectSink:
             connection.execute("BEGIN IMMEDIATE")
             row = connection.execute(
                 """
-                SELECT fingerprint
-                FROM effects
+                SELECT fingerprint, effect_sequence
+                FROM idempotency_records
                 WHERE operation_id = ?
                 """,
                 (operation.operation_id,),
             ).fetchone()
 
             if row is None:
-                connection.execute(
+                cursor = connection.execute(
                     """
                     INSERT INTO effects(operation_id, fingerprint)
                     VALUES (?, ?)
                     """,
                     (operation.operation_id, fingerprint),
                 )
+                effect_sequence = cursor.lastrowid
+                assert effect_sequence is not None
+                connection.execute(
+                    """
+                    INSERT INTO idempotency_records(
+                        operation_id,
+                        fingerprint,
+                        effect_sequence
+                    )
+                    VALUES (?, ?, ?)
+                    """,
+                    (operation.operation_id, fingerprint, effect_sequence),
+                )
                 return EffectResult(
                     decision=EffectDecision.APPLIED,
                     operation_id=operation.operation_id,
+                    effect_id=f"effect-{effect_sequence}",
                 )
 
             recorded_fingerprint = str(row[0])
             if recorded_fingerprint != fingerprint:
                 raise IdempotencyConflict(operation.operation_id)
 
+            effect_sequence = int(row[1])
             return EffectResult(
                 decision=EffectDecision.REPLAYED,
                 operation_id=operation.operation_id,
+                effect_id=f"effect-{effect_sequence}",
+            )
+
+    def expire(self, operation_id: str) -> None:
+        """Remove idempotency knowledge without removing the visible effect."""
+
+        with sqlite3.connect(self._path) as connection:
+            connection.execute(
+                """
+                DELETE FROM idempotency_records
+                WHERE operation_id = ?
+                """,
+                (operation_id,),
             )
 
     def visible_effect_count(self) -> int:
-        """Return the number of distinct logical effects admitted by the sink."""
+        """Return the number of application-visible effects admitted by the sink."""
 
         with sqlite3.connect(self._path) as connection:
             row = connection.execute("SELECT COUNT(*) FROM effects").fetchone()
@@ -217,14 +256,25 @@ def run_experiment() -> int:
         new_identity_result = protected.apply(new_identity)
         count_after_new_identity = protected.visible_effect_count()
 
+        retention = IdempotentEffectSink(root / "retention.sqlite")
+        retained_first = retention.apply(operation)
+        retention.expire(operation.operation_id)
+        after_expiry = retention.apply(operation)
+        retention_count = retention.visible_effect_count()
+
     if (
         naive_count != 2
         or first.decision is not EffectDecision.APPLIED
         or replay.decision is not EffectDecision.REPLAYED
+        or replay.effect_id != first.effect_id
         or protected_count != 1
         or conflict_reason is not RejectionReason.IDEMPOTENCY_CONFLICT
         or new_identity_result.decision is not EffectDecision.APPLIED
         or count_after_new_identity != 2
+        or retained_first.decision is not EffectDecision.APPLIED
+        or after_expiry.decision is not EffectDecision.APPLIED
+        or retained_first.effect_id == after_expiry.effect_id
+        or retention_count != 2
     ):
         print("UNEXPECTED OBSERVATION: experiment assertions did not hold")
         return 1
@@ -235,9 +285,9 @@ def run_experiment() -> int:
     print("result: DUPLICATED")
     print()
     print("PROTECTED RETRY")
-    print(f"first attempt: {first.decision.value}")
+    print(f"first attempt: {first.decision.value} ({first.effect_id})")
     print("sink reopened before retry")
-    print(f"retry with same operation id: {replay.decision.value}")
+    print(f"retry with same operation id: {replay.decision.value} ({replay.effect_id})")
     print(f"visible effects: {protected_count}")
     print("result: ONE APPLICATION-VISIBLE EFFECT")
     print()
@@ -250,18 +300,25 @@ def run_experiment() -> int:
     print(f"result: {new_identity_result.decision.value}")
     print(f"visible effects after new identity: {count_after_new_identity}")
     print()
+    print("RETENTION BOUNDARY")
+    print("first logical effect remains visible")
+    print("idempotency record expired")
+    print(f"retry after expiry: {after_expiry.decision.value} ({after_expiry.effect_id})")
+    print(f"visible effects after expiry: {retention_count}")
+    print("result: AT-MOST-ONE GUARANTEE NO LONGER AVAILABLE")
+    print()
     print("GUARANTEE")
     print(
         "Given a stable logical operation id, immutable content bound to that id, "
-        "and a durable sink that atomically enforces uniqueness by operation id, "
+        "and a durable atomic idempotency record retained across the retry window, "
         "retries of the same logical operation produce at most one "
         "application-visible effect."
     )
     print()
     print("NON-GUARANTEE")
     print(
-        "This does not establish exactly-once execution or delivery, arbitrary "
-        "provider idempotency, concurrent fencing, complete operation provenance, "
-        "or durable dispatch."
+        "This does not establish safety after idempotency-record expiry, exactly-once "
+        "execution or delivery, arbitrary provider idempotency, concurrent fencing, "
+        "complete operation provenance, or durable dispatch."
     )
     return 0
