@@ -17,8 +17,12 @@ its behavior and its boundary is provider- and framework-independent.
 3. **Executable experiments** — milestone code owns scenarios, probes, expected
    observations, and evidence. Planned experiments have no placeholder
    implementation directories.
-4. **Reusable core** — future capabilities may be promoted only when an
-   experiment establishes a useful guarantee under explicit assumptions.
+4. **Synthesis / promotion boundary** — completed experiment guarantees are
+   classified before any mechanism moves inward. Promotion requires an explicit
+   destination, missing-evidence check, and real-consumer validation.
+5. **Reusable core** — future capabilities may be promoted only when executable
+   evidence plus consumer validation justify a small provider- and
+   framework-independent mechanism.
 
 Dependencies should point inward: experiments may use the reusable core, but
 the core must not depend on experiment code or a specific AI provider.
@@ -32,4 +36,6 @@ the core must not depend on experiment code or a specific AI provider.
 - Metadata status is authoritative. A planned invariant is not a guarantee.
 
 These boundaries are recorded in
-[Decision 0001](decisions/0001-foundation-principles.md).
+[Decision 0001](decisions/0001-foundation-principles.md). The current
+post-M7 promotion decisions are tracked in the
+[M1–M7 synthesis and promotion map](m1-m7-synthesis-and-promotion-map.md).
