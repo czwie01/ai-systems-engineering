@@ -21,8 +21,14 @@
   compare-and-swap accepts at most one competing transition from one observed
   generation, while the naive stale-write and ABA controls expose why state
   values alone are insufficient.
-- M7 remains planned; M3–M6 do not claim exactly-once execution/delivery,
-  distributed consensus, multi-record atomicity, or durable dispatch.
+- M7 `durable-dispatch` demonstrates a transactional-outbox-style durable
+  handoff: authoritative state plus dispatch intent survive process failure when
+  committed atomically, while effect-before-ack replay composes with M4
+  idempotency.
+- The planned M1–M7 experiment sequence is now executable. Promotion into a
+  reusable core and production runtime selection remain separate decisions;
+  M3–M7 still do not claim exactly-once delivery/execution, distributed
+  consensus, cross-database atomicity, or bounded liveness.
 
 ## v0.1.0 — Evidence & Evaluation
 
