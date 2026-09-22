@@ -20,8 +20,8 @@ tested.
 
 v0.1.0 — Evidence & Evaluation contains the M1 and M2 guarantees below. They
 are complementary: a valid evidence relationship is not a passing
-claim-support verdict. Post-v0.1 development adds M3, M4, and M5. M0 remains
-the repository and discovery foundation.
+claim-support verdict. Post-v0.1 development adds M3, M4, M5, and M6. M0
+remains the repository and discovery foundation.
 
 M1 adds one demonstrated evidence relationship guarantee:
 
@@ -123,5 +123,27 @@ inputs. It does not establish cryptographic authenticity, tamper evidence,
 external-effect truth, full distributed tracing, hidden reasoning capture,
 concurrent fencing, or durable dispatch.
 
-M6–M7 invariants remain planned targets, not demonstrated guarantees. Their
-registry descriptions communicate intent and do not claim implementation.
+M6 adds one demonstrated concurrent-promotion guarantee:
+
+> Given one authoritative record and an atomic compare-and-swap on its expected
+> source state and monotonically increasing generation, at most one competing
+> transition can be accepted from one observed generation.
+
+The executable evidence first synchronizes two real threads after both observe
+`candidate@0`. The naive control accepts both conflicting stale writes and
+advances the generation twice. The protected run accepts exactly one transition,
+classifies the other as `stale-generation`, advances the generation once, and
+reconstructs the same accepted state after the SQLite store is reopened.
+
+A separate ABA control moves authority from `candidate@0` to `review@1` and
+back to `candidate@2`. A state-only guard accepts the stale generation-0 actor
+because the state string matches again; the generation fence rejects it.
+
+The guarantee assumes one authoritative record whose source-state/generation
+compare-and-swap is atomic and whose generation advances monotonically. It does
+not establish distributed consensus, fairness, lease semantics, dead-actor
+recovery, multi-record or multi-repository transactions, Git conflict
+prevention, or durable dispatch.
+
+M7 remains a planned target, not a demonstrated guarantee. Its registry
+description communicates intent and does not claim implementation.
