@@ -4,6 +4,9 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
+from ai_systems.experiments.ambiguous_completion import (
+    run_experiment as run_ambiguous_completion,
+)
 from ai_systems.experiments.evaluation_oracle_integrity import (
     run_experiment as run_evaluation_oracle_integrity,
 )
@@ -90,12 +93,13 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Ambiguous Completion and Idempotency",
         milestone="M4",
         area="reliability",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question="How can a caller recover when completion is uncertain?",
         intended_invariant=(
             "Retries of one logical operation produce at most one application-visible "
             "effect under the experiment's stated assumptions."
         ),
+        runner=run_ambiguous_completion,
     ),
     Experiment(
         identifier="operation-provenance",

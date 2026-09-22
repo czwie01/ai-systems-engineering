@@ -29,6 +29,7 @@ uv run ai-systems list
 uv run ai-systems run evidence-contracts
 uv run ai-systems run evaluation-oracle-integrity
 uv run ai-systems run failure-semantics
+uv run ai-systems run ambiguous-completion
 ```
 
 Tests and examples must be deterministic and must not require credentials,
