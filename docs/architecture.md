@@ -29,6 +29,11 @@ the core must not depend on experiment code or a specific AI provider.
 
 ## Operating constraints
 
+- **OSS-first is a sourcing preference, not a correctness claim.** Prefer
+  maintained open-source/self-hostable realizations where they reduce lock-in,
+  but accept a mechanism only when executable evidence shows that it satisfies
+  the repository's provider- and framework-independent semantic contract. See
+  [the M1–M7 synthesis](m1-m7-synthesis-and-promotion-map.md#runtime-sourcing-principle).
 - The default path is offline and deterministic.
 - No baseline check requires credentials, a provider, a model, or a service.
 - Synthetic or explicitly redistributable material is the only acceptable
