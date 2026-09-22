@@ -82,21 +82,26 @@ completeness, distributed authority, or that every runtime exposes those facts.
 M4 adds one demonstrated ambiguous-completion retry guarantee:
 
 > Given a stable logical operation id, immutable operation content bound to that
-> id, and a durable sink that atomically enforces uniqueness by operation id,
-> retries of the same logical operation produce at most one
-> application-visible effect.
+> id, and a durable atomic idempotency record retained across the retry window
+> that binds the operation to its visible effect identity, retries of the same
+> logical operation produce at most one application-visible effect while that
+> record is retained.
 
 The executable evidence includes a failure-first naive control where retrying
 one logical operation creates two visible effects, a protected retry after the
-sink is reopened where the same stable id creates one visible effect, rejection
-of the same id with different content as `idempotency-conflict`, and a control
-showing that minting a new id makes the same content a new logical effect.
+sink is reopened where the same stable id replays the same effect identity with
+one visible effect, rejection of the same id with different content as
+`idempotency-conflict`, a control showing that minting a new id makes the same
+content a new logical effect, and a retention-boundary control where deleting
+only the idempotency record leaves the original effect visible but allows the
+same logical operation to create a second effect.
 
-The guarantee depends on durable atomic deduplication at the effect boundary and
-stable identity reuse across attempts. It does not establish exactly-once
-execution or delivery, arbitrary provider idempotency, atomicity across an
-unrelated external provider and local database, concurrent fencing, complete
-operation provenance, or durable dispatch.
+The guarantee depends on stable identity reuse plus a durable atomic
+idempotency record retained for the complete retry window. Once that record is
+expired or pruned, the demonstrated at-most-one guarantee no longer applies. It
+does not establish exactly-once execution or delivery, arbitrary provider
+idempotency, atomicity across an unrelated external provider and local database,
+concurrent fencing, complete operation provenance, or durable dispatch.
 
 M5 adds one demonstrated operation-provenance guarantee:
 

@@ -27,10 +27,12 @@ Given:
 
 1. one stable logical operation id reused across attempts;
 2. immutable operation content bound to that id;
-3. a durable sink that atomically enforces uniqueness by that operation id;
+3. a durable atomic idempotency record that binds the operation id to its
+   immutable content and visible effect identity;
+4. that record remains retained for the whole retry window.
 
 retries of the same logical operation produce **at most one
-application-visible effect**.
+application-visible effect while the idempotency record is retained**.
 
 ## Failure-first control
 
@@ -45,21 +47,29 @@ one row would not establish that the guard is doing useful work.
 
 ## Protected mechanism
 
-The protected synthetic sink persists:
+The protected synthetic sink separates two durable facts:
 
 ```text
-operation_id -> immutable operation fingerprint
+visible effects:
+  effect_sequence -> operation_id + immutable fingerprint
+
+idempotency knowledge:
+  operation_id -> immutable fingerprint + effect_sequence
 ```
 
-The operation id is a primary key. The immutable content fingerprint is derived
-from structured serialization of the effect name and payload, rather than an
-ambiguous delimiter-joined string.
+The operation id is the primary key of the idempotency record. The immutable
+content fingerprint is derived from structured serialization of the effect name
+and payload, rather than an ambiguous delimiter-joined string. The visible
+effect and its idempotency record are written in the same SQLite transaction.
 
 On submission:
 
-- unseen id + content -> `applied`;
-- same id + same content -> `replayed` with no new visible effect;
-- same id + different content -> reject `idempotency-conflict`.
+- unseen id + content -> create one visible effect and retain its idempotency
+  record;
+- same id + same content while retained -> `replayed` with the same effect
+  identity and no new visible effect;
+- same id + different content while retained -> reject
+  `idempotency-conflict`.
 
 The experiment reopens the SQLite sink before the retry so the result does not
 depend on controller-process memory.
@@ -67,6 +77,11 @@ depend on controller-process memory.
 A separate negative control submits the same content with a **new operation id**.
 That is correctly treated as a new logical effect. This demonstrates that
 idempotency depends on stable operation identity, not content coincidence.
+
+The retention control then removes only the idempotency record while preserving
+the first visible effect. Retrying the formerly protected operation is treated
+as new work and creates a second effect. That explicitly falsifies any claim
+that the at-most-one guarantee survives record expiry.
 
 ## Run it
 
@@ -80,10 +95,12 @@ Python standard library.
 ## Demonstrated guarantee
 
 Under the explicit assumptions above, retries of one logical operation produce
-at most one application-visible effect.
+at most one application-visible effect **while the authoritative idempotency
+record remains retained across the retry window**.
 
 This is an **at-most-one-visible-effect** guarantee for the protected synthetic
-sink. It is not an exactly-once execution or delivery claim.
+sink during that retention window. It is not an exactly-once execution or
+delivery claim.
 
 ## What this does not prove
 
@@ -92,6 +109,7 @@ M4 does not establish:
 - that an arbitrary provider accepts or correctly implements idempotency keys;
 - that a local idempotency record can be made atomic with an unrelated external
   service;
+- safety after the authoritative idempotency record is expired or pruned;
 - exactly-once execution or delivery;
 - correctness under concurrent competing callers or stale actors (M6);
 - complete attempt/effect/recovery audit history (M5);

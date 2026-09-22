@@ -99,8 +99,9 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         status=ExperimentStatus.AVAILABLE,
         engineering_question="How can a caller recover when completion is uncertain?",
         intended_invariant=(
-            "Retries of one logical operation produce at most one application-visible "
-            "effect under the experiment's stated assumptions."
+            "While authoritative idempotency state remains retained, retries of one "
+            "logical operation produce at most one application-visible effect under "
+            "the experiment's stated assumptions."
         ),
         runner=run_ambiguous_completion,
     ),
