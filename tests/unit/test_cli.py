@@ -12,8 +12,8 @@ def test_list_exposes_every_registered_experiment_truthfully(
     output = capsys.readouterr().out
     for experiment in EXPERIMENTS:
         assert experiment.identifier in output
-    assert output.count("planned") == len(EXPERIMENTS) - 6
-    assert output.count("available") == 6
+    assert output.count("planned") == 0
+    assert output.count("available") == len(EXPERIMENTS)
 
 
 def test_explain_registered_experiment(
@@ -129,14 +129,18 @@ def test_run_concurrent_promotion_succeeds(
     assert "NON-GUARANTEE" in output
 
 
-def test_run_planned_experiment_fails_clearly(
+def test_run_durable_dispatch_succeeds(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    with pytest.raises(SystemExit) as error:
-        main(["run", "durable-dispatch"])
+    assert main(["run", "durable-dispatch"]) == 0
 
-    assert error.value.code != 0
-    assert (
-        "experiment is not available to run: durable-dispatch (status: planned)"
-        in capsys.readouterr().err
-    )
+    output = capsys.readouterr().out
+    assert "NAIVE DUAL-WRITE CONTROL" in output
+    assert "COMMITTED WORK REQUIREMENT LOST ITS DISPATCH" in output
+    assert "TRANSACTIONAL OUTBOX" in output
+    assert "COMMITTED DISPATCH INTENT SURVIVED RESTART" in output
+    assert "EFFECT-BEFORE-ACK REPLAY" in output
+    assert "RETAINED INTENT REPLAYED AND ACKNOWLEDGED" in output
+    assert "GUARANTEE" in output
+    assert "COMPOSITION" in output
+    assert "NON-GUARANTEE" in output
