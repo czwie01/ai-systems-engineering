@@ -72,7 +72,9 @@ generated claim. The current development branch additionally contains M3 `failur
 M4 `ambiguous-completion`, M5 `operation-provenance`, M6
 `concurrent-promotion`, and M7 `durable-dispatch`; those experiments are not
 part of the v0.1.0 release checkpoint. The planned M1–M7 experiment sequence is
-now executable; release/promotion synthesis remains separate. This Alpha boundary is not a stable public
+now executable. Post-M7 work has moved to an explicit synthesis/promotion phase;
+see [the M1–M7 synthesis and promotion map](docs/m1-m7-synthesis-and-promotion-map.md).
+This Alpha boundary is not a stable public
 library API and is not published to PyPI. See [CHANGELOG.md](CHANGELOG.md) for
 the release record.
 
@@ -102,6 +104,10 @@ See [Architecture](docs/architecture.md) and the
 | v0.2 | Reliable AI Execution | release checkpoint | planned |
 | M6 | `concurrent-promotion` | coordination | available |
 | M7 | `durable-dispatch` | reliability | available |
+| S0 | M1–M7 synthesis / promotion map | architecture | in progress |
+| S1 | real-consumer validation | validation | planned |
+| S2 | maintained-runtime conformance | integration research | planned |
+| S3 | route / promote validated semantics | architecture | planned |
 | v0.3 | Safe Agentic State Changes | release checkpoint | planned |
 
 A roadmap entry is not evidence that its invariant holds.
@@ -118,7 +124,10 @@ operation-provenance guarantee, the M6 generation-fenced promotion guarantee,
 and the M7 durable-dispatch guarantee under their explicit assumptions. It does not claim a stable
 public API or production readiness.
 
-Read the full [guarantee model](docs/guarantees.md).
+Read the full [guarantee model](docs/guarantees.md) and the
+[M1–M7 synthesis / promotion map](docs/m1-m7-synthesis-and-promotion-map.md).
+Completing an experiment does not automatically promote its mechanism into the
+reusable core.
 
 ## Public by construction
 
