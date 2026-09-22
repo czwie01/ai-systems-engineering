@@ -303,7 +303,9 @@ def run_experiment() -> int:
     print("RETENTION BOUNDARY")
     print("first logical effect remains visible")
     print("idempotency record expired")
-    print(f"retry after expiry: {after_expiry.decision.value} ({after_expiry.effect_id})")
+    print(
+        f"retry after expiry: {after_expiry.decision.value} ({after_expiry.effect_id})"
+    )
     print(f"visible effects after expiry: {retention_count}")
     print("result: AT-MOST-ONE GUARANTEE NO LONGER AVAILABLE")
     print()
