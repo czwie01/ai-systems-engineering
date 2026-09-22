@@ -71,9 +71,10 @@ Read them in that order. A valid evidence relationship is not a supported
 generated claim. The current development branch additionally contains M3 `failure-semantics`,
 M4 `ambiguous-completion`, M5 `operation-provenance`, M6
 `concurrent-promotion`, and M7 `durable-dispatch`; those experiments are not
-part of the v0.1.0 release checkpoint. The planned M1–M7 experiment sequence is now executable. Post-M7 work has moved
-to an explicit synthesis/promotion phase; see
-[the M1–M7 synthesis and promotion map](docs/m1-m7-synthesis-and-promotion-map.md). This Alpha boundary is not a stable public
+part of the v0.1.0 release checkpoint. The planned M1–M7 experiment sequence is
+now executable. Post-M7 work has moved to an explicit synthesis/promotion phase;
+see [the M1–M7 synthesis and promotion map](docs/m1-m7-synthesis-and-promotion-map.md).
+This Alpha boundary is not a stable public
 library API and is not published to PyPI. See [CHANGELOG.md](CHANGELOG.md) for
 the release record.
 
@@ -107,7 +108,6 @@ See [Architecture](docs/architecture.md) and the
 | S1 | real-consumer validation | validation | planned |
 | S2 | maintained-runtime conformance | integration research | planned |
 | S3 | route / promote validated semantics | architecture | planned |
-| v0.2 | Reliable AI Execution | release checkpoint | planned |
 | v0.3 | Safe Agentic State Changes | release checkpoint | planned |
 
 A roadmap entry is not evidence that its invariant holds.
