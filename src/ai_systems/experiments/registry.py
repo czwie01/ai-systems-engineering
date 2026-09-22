@@ -10,6 +10,9 @@ from ai_systems.experiments.evaluation_oracle_integrity import (
 from ai_systems.experiments.evidence_contracts import (
     run_experiment as run_evidence_contracts,
 )
+from ai_systems.experiments.failure_semantics import (
+    run_experiment as run_failure_semantics,
+)
 
 
 class ExperimentStatus(StrEnum):
@@ -73,13 +76,14 @@ EXPERIMENTS: tuple[Experiment, ...] = (
         name="Provider-Neutral Failure Semantics",
         milestone="M3",
         area="execution",
-        status=ExperimentStatus.PLANNED,
+        status=ExperimentStatus.AVAILABLE,
         engineering_question=(
             "How can provider failures map to stable application semantics?"
         ),
         intended_invariant=(
             "Equivalent failures have provider-independent classifications."
         ),
+        runner=run_failure_semantics,
     ),
     Experiment(
         identifier="ambiguous-completion",

@@ -1,0 +1,153 @@
+name: Failure boundary characterization
+
+on:
+  pull_request:
+    paths:
+      - "src/ai_systems/experiments/failure_semantics.py"
+      - "tests/unit/experiments/test_failure_semantics.py"
+      - "experiments/failure-semantics/**"
+      - ".github/workflows/failure-boundary-characterization.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  langgraph:
+    name: LangGraph / ${{ matrix.scenario }} / ${{ matrix.mode }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - scenario: before-effect
+            mode: naive
+          - scenario: after-effect-before-checkpoint
+            mode: naive
+          - scenario: after-effect-before-checkpoint
+            mode: idempotent
+          - scenario: after-checkpoint
+            mode: naive
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.12"
+          python-version: "3.13"
+
+      - name: Install isolated characterization environment
+        run: |
+          uv venv .venv-characterization
+          uv pip install --python .venv-characterization/bin/python \
+            "langgraph==1.2.11" \
+            "langgraph-checkpoint-sqlite==3.1.1"
+
+      - name: Inject crash, inspect, recover, and verify
+        env:
+          PYTHONPATH: src
+        run: |
+          PY=.venv-characterization/bin/python
+          RUNNER=experiments/failure-semantics/characterization/langgraph_runner.py
+          ROOT=".tmp/failure-boundary/langgraph/${{ matrix.scenario }}-${{ matrix.mode }}"
+
+          set +e
+          "$PY" "$RUNNER" start \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          code=$?
+          set -e
+
+          if [ "$code" -ne 86 ]; then
+            echo "expected injected process exit 86, got $code"
+            exit 1
+          fi
+
+          "$PY" "$RUNNER" inspect \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          "$PY" "$RUNNER" resume \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          "$PY" "$RUNNER" verify \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+
+  microsoft-agent-framework:
+    name: Agent Framework / ${{ matrix.scenario }} / ${{ matrix.mode }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - scenario: before-effect
+            mode: naive
+          - scenario: after-effect-before-checkpoint
+            mode: naive
+          - scenario: after-effect-before-checkpoint
+            mode: idempotent
+          - scenario: after-checkpoint
+            mode: naive
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.12"
+          python-version: "3.13"
+
+      - name: Install isolated characterization environment
+        run: |
+          uv venv .venv-characterization
+          uv pip install --python .venv-characterization/bin/python \
+            "agent-framework-core==1.19.0"
+
+      - name: Inject crash, inspect, recover, and verify
+        env:
+          PYTHONPATH: src
+        run: |
+          PY=.venv-characterization/bin/python
+          RUNNER=experiments/failure-semantics/characterization/maf_runner.py
+          ROOT=".tmp/failure-boundary/maf/${{ matrix.scenario }}-${{ matrix.mode }}"
+
+          set +e
+          "$PY" "$RUNNER" start \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          code=$?
+          set -e
+
+          if [ "$code" -ne 86 ]; then
+            echo "expected injected process exit 86, got $code"
+            exit 1
+          fi
+
+          "$PY" "$RUNNER" inspect \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          "$PY" "$RUNNER" resume \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
+          "$PY" "$RUNNER" verify \
+            --root "$ROOT" \
+            --scenario "${{ matrix.scenario }}" \
+            --mode "${{ matrix.mode }}"
