@@ -104,7 +104,7 @@ See [Architecture](docs/architecture.md) and the
 | v0.2 | Reliable AI Execution | release checkpoint | planned |
 | M6 | `concurrent-promotion` | coordination | available |
 | M7 | `durable-dispatch` | reliability | available |
-| S0 | M1–M7 synthesis / promotion map | architecture | in progress |
+| S0 | M1–M7 synthesis / promotion map | architecture | complete |
 | S1 | real-consumer validation | validation | planned |
 | S2 | maintained-runtime conformance | integration research | planned |
 | S3 | route / promote validated semantics | architecture | planned |
