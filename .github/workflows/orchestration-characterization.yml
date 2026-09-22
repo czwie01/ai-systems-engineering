@@ -1,0 +1,71 @@
+name: Orchestration characterization
+
+on:
+  pull_request:
+    paths:
+      - "experiments/orchestration-runtime-characterization/**"
+      - ".github/workflows/orchestration-characterization.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  langgraph:
+    name: LangGraph 1.2.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.12"
+          python-version: "3.13"
+
+      - name: Install isolated characterization environment
+        run: |
+          uv venv .venv-characterization
+          uv pip install --python .venv-characterization/bin/python \
+            "langgraph==1.2.11" \
+            "langgraph-checkpoint-sqlite==3.1.1"
+
+      - name: Run fresh-process HITL characterization
+        run: |
+          PY=.venv-characterization/bin/python
+          ROOT=.tmp/orchestration-r2/langgraph
+          "$PY" experiments/orchestration-runtime-characterization/langgraph_runner.py start --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/langgraph_runner.py resume-intent --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/langgraph_runner.py resume-promotion --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/langgraph_runner.py verify --root "$ROOT"
+
+  microsoft-agent-framework:
+    name: Microsoft Agent Framework Core 1.19.0
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.12"
+          python-version: "3.13"
+
+      - name: Install isolated characterization environment
+        run: |
+          uv venv .venv-characterization
+          uv pip install --python .venv-characterization/bin/python \
+            "agent-framework-core==1.19.0"
+
+      - name: Run fresh-process HITL characterization
+        run: |
+          PY=.venv-characterization/bin/python
+          ROOT=.tmp/orchestration-r2/microsoft-agent-framework
+          "$PY" experiments/orchestration-runtime-characterization/maf_runner.py start --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/maf_runner.py resume-intent --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/maf_runner.py resume-promotion --root "$ROOT"
+          "$PY" experiments/orchestration-runtime-characterization/maf_runner.py verify --root "$ROOT"
